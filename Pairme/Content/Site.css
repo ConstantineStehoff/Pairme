@@ -40,3 +40,8 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.ds-initForm{
+    margin: 0 auto;
+    max-width: 500px;
+}

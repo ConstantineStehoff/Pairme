@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+//using System.Web.Mvc;
+using System.Web.ModelBinding;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Pairme.Models;
 
 namespace Pairme
 {
@@ -12,10 +14,11 @@ namespace Pairme
     {
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            System.Web.Mvc.AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(System.Web.Mvc.GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ModelBinders.Binders.Add(typeof(IStepViewModel), new StepViewModelBinder());
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Pairme.Models;
+using MvcContrib.Attributes;
 
 namespace Pairme.Controllers
 {
@@ -26,6 +27,45 @@ namespace Pairme.Controllers
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
+
+        [AllowAnonymous]
+        public ActionResult Index()
+        {
+            var wizard = new WizardViewModel();
+            wizard.Initialize();
+            return View(wizard);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Index(
+            [Deserialize] WizardViewModel wizard, 
+            IStepViewModel step,
+            string returnUrl)
+        {
+            wizard.Steps[wizard.CurrentStepIndex] = step;
+            if (ModelState.IsValid)
+            {
+                if (!string.IsNullOrEmpty(Request["next"]))
+                {
+                    wizard.CurrentStepIndex++;
+                }
+                else if (!string.IsNullOrEmpty(Request["prev"]))
+                {
+                    wizard.CurrentStepIndex--;
+                }
+                else
+                {
+                    // finished all the steps
+                    return Content("Thanks for filling the form", "text/plain");
+                }
+            }
+            else if (!string.IsNullOrEmpty(Request["prev"]))
+            {
+                wizard.CurrentStepIndex--;
+            }
+            return View(wizard);
+        }
 
         //
         // GET: /Account/Login
@@ -78,7 +118,8 @@ namespace Pairme.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName };
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email,
+                    Country = model.Country, ZipCode = model.ZipCode };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

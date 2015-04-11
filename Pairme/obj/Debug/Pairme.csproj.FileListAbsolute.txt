@@ -53,3 +53,13 @@ C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\Micr
 C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\obj\Debug\Pairme.csprojResolveAssemblyReference.cache
 C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\obj\Debug\Pairme.dll
 C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\obj\Debug\Pairme.pdb
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\obj\Debug\Pairme.Migrations.reset.resources
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\obj\Debug\Pairme.csproj.GenerateResource.Cache
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\Microsoft.Web.Mvc.dll
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\MvcContrib.dll
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\MvcContrib.xml
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\Microsoft.Web.Helpers.dll
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\WebMatrix.Data.dll
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\WebMatrix.WebData.dll
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\WebMatrix.Data.xml
+C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\bin\WebMatrix.WebData.xml
