@@ -48,8 +48,7 @@ namespace Pairme.Models
         public bool RememberMe { get; set; }
     }
 
-    [Serializable]
-    public class RegisterViewModelStep1 : IStepViewModel
+    public class RegisterViewModelStep1
     {
         [Required]
         [Display(Name = "Age")]
@@ -72,8 +71,7 @@ namespace Pairme.Models
         public int ZipCode { get; set; }
     }
 
-    [Serializable]
-    public class RegisterViewModelStep2 : IStepViewModel
+    public class RegisterViewModelStep2
     {
         [Required]
         [Display(Name = "Username")]
@@ -96,21 +94,16 @@ namespace Pairme.Models
         public string ConfirmPassword { get; set; }
     }
 
-    [Serializable]
-    public class WizardViewModel
+    public class RegisterViewModelStep3
     {
-        public int CurrentStepIndex { get; set; }
-        public IList<IStepViewModel> Steps { get; set; }
+        [Display(Name = "Upload Picture")]
+        public string PictureFile { get; set; }
 
-        public void Initialize()
-        {
-            Steps = typeof(IStepViewModel)
-                    .Assembly
-                    .GetTypes()
-                    .Where(t => !t.IsAbstract && typeof(IStepViewModel).IsAssignableFrom(t))
-                    .Select(t => (IStepViewModel)Activator.CreateInstance(t))
-                    .ToList();
-        }
+        [Display(Name = "Summary")]
+        public string Summary { get; set; }
+
+        [Display(Name = "I agree with Terms of Service")]
+        public bool TermsOfService { get; set; }
     }
 
     public class RegisterViewModel
@@ -159,19 +152,5 @@ namespace Pairme.Models
         [Required]
         [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
-    }
-}
-
-
-//Model binder
-public class StepViewModelBinder : DefaultModelBinder
-{
-    protected object CreateModel(System.Web.Mvc.ControllerContext controllerContext, ModelBindingContext bindingContext, Type modelType)
-    {
-        var stepTypeValue = bindingContext.ValueProvider.GetValue("StepType");
-        var stepType = Type.GetType((string)stepTypeValue.ConvertTo(typeof(string)), true);
-        var step = Activator.CreateInstance(stepType);
-        bindingContext.ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => step, stepType);
-        return step;
     }
 }

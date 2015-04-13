@@ -31,40 +31,107 @@ namespace Pairme.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var wizard = new WizardViewModel();
-            wizard.Initialize();
-            return View(wizard);
+            return View();
+        }
+
+        private RegisterViewModel GetRegisterModel()
+        {
+            if (Session["RegisterModel"] == null)
+            {
+                Session["RegisterModel"] = new RegisterViewModel();
+            }
+            return (RegisterViewModel)Session["RegisterModel"];
+        }
+
+        private void RemoveRegisterModel()
+        {
+            Session.Remove("RegisterModel");
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Index(
-            [Deserialize] WizardViewModel wizard, 
-            IStepViewModel step,
-            string returnUrl)
+        public ActionResult Index(RegisterViewModelStep1 model, string Command)
         {
-            wizard.Steps[wizard.CurrentStepIndex] = step;
-            if (ModelState.IsValid)
-            {
-                if (!string.IsNullOrEmpty(Request["next"]))
+            if (ModelState.IsValid){
+                if (Command == "Browse")
                 {
-                    wizard.CurrentStepIndex++;
+                    return RedirectToAction("Index", "Browse");
                 }
-                else if (!string.IsNullOrEmpty(Request["prev"]))
+                else if (Command == "Register")
                 {
-                    wizard.CurrentStepIndex--;
-                }
-                else
-                {
-                    // finished all the steps
-                    return Content("Thanks for filling the form", "text/plain");
+                    RegisterViewModel registerModel = GetRegisterModel();
+                    registerModel.Gender = model.Gender;
+                    registerModel.MatchGender = model.MatchGender;
+                    registerModel.Country = model.Country;
+                    registerModel.Age = model.Age;
+                    registerModel.ZipCode = model.ZipCode;
+                    return RedirectToAction("RegisterStep2");
                 }
             }
-            else if (!string.IsNullOrEmpty(Request["prev"]))
+            return View();
+        }
+        
+        [AllowAnonymous]
+        public ActionResult RegisterStep2()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> RegisterStep2(RegisterViewModelStep2 model, string Command)
+        {
+            RegisterViewModel registerModel = GetRegisterModel();
+            if (Command == "Back")
             {
-                wizard.CurrentStepIndex--;
+                RegisterViewModelStep1 step1Model = new RegisterViewModelStep1();
+                step1Model.Gender = registerModel.Gender;
+                step1Model.MatchGender = registerModel.MatchGender;
+                step1Model.Country = registerModel.Country;
+                step1Model.Age = registerModel.Age;
+                step1Model.ZipCode = registerModel.ZipCode;
+                return RedirectToAction("Index");
             }
-            return View(wizard);
+            else if (Command == "Next")
+            {
+
+                if (ModelState.IsValid)
+                {
+                    registerModel.UserName = model.UserName;
+                    registerModel.Email = model.Email;
+                    registerModel.Password = model.Password;
+                    
+                    var user = new ApplicationUser()
+                    {
+                        UserName = registerModel.UserName,
+                        Email = registerModel.Email,
+                        Country = registerModel.Country,
+                        ZipCode = registerModel.ZipCode,
+                        Gender = registerModel.Gender,
+                        MatchGender = registerModel.MatchGender,
+                        Age = registerModel.Age
+                    };
+                    var result = await UserManager.CreateAsync(user, registerModel.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("RegisterStep3");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+                    
+                }
+            }
+            
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterStep3()
+        {
+            return View();
         }
 
         //

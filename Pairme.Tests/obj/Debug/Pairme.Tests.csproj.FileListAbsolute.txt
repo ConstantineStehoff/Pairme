@@ -42,5 +42,3 @@ C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme.Tests\bi
 C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme.Tests\obj\Debug\Pairme.Tests.csprojResolveAssemblyReference.cache
 C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme.Tests\obj\Debug\Pairme.Tests.dll
 C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme.Tests\obj\Debug\Pairme.Tests.pdb
-C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme.Tests\bin\Debug\MvcContrib.dll
-C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme.Tests\bin\Debug\MvcContrib.xml
