@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Pairme.Models;
+using MvcContrib.Attributes;
+using System.IO;
 
 namespace Pairme.Controllers
 {
@@ -26,6 +28,167 @@ namespace Pairme.Controllers
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
+
+        [AllowAnonymous]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        private RegisterViewModel GetRegisterModel()
+        {
+            if (Session["RegisterModel"] == null)
+            {
+                Session["RegisterModel"] = new RegisterViewModel();
+            }
+            return (RegisterViewModel)Session["RegisterModel"];
+        }
+
+        private void RemoveRegisterModel()
+        {
+            Session.Remove("RegisterModel");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Index(RegisterViewModelStep1 model, string Command)
+        {
+            if (ModelState.IsValid){
+                if (Command == "Browse")
+                {
+                    return RedirectToAction("Index", "Browse");
+                }
+                else if (Command == "Register")
+                {
+                    RegisterViewModel registerModel = GetRegisterModel();
+                    registerModel.Gender = model.Gender;
+                    registerModel.MatchGender = model.MatchGender;
+                    registerModel.Country = model.Country;
+                    registerModel.Age = model.Age;
+                    registerModel.ZipCode = model.ZipCode;
+                    return RedirectToAction("Register");
+                }
+            }
+            return View();
+        }
+        
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Register(RegisterViewModelStep2 model, string Command)
+        {
+            RegisterViewModel registerModel = GetRegisterModel();
+            if (Command == "Back")
+            {
+                RegisterViewModelStep1 step1Model = new RegisterViewModelStep1();
+                step1Model.Gender = registerModel.Gender;
+                step1Model.MatchGender = registerModel.MatchGender;
+                step1Model.Country = registerModel.Country;
+                step1Model.Age = registerModel.Age;
+                step1Model.ZipCode = registerModel.ZipCode;
+                return RedirectToAction("Index");
+            }
+            else if (Command == "Next")
+            {
+
+                if (ModelState.IsValid)
+                {
+                    registerModel.UserName = model.UserName;
+                    registerModel.Email = model.Email;
+                    registerModel.Password = model.Password;
+                    return RedirectToAction("Register2");
+                }
+            }
+            
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Register2()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> Register2(RegisterViewModelStep3 model, string Command)
+        {
+            int imgSize = 30720;
+            string imagePath = "";
+            RegisterViewModel registerModel = GetRegisterModel();
+            if (Command == "Back")
+            {
+                RegisterViewModelStep2 step2Model = new RegisterViewModelStep2();
+                step2Model.UserName = registerModel.UserName;
+                step2Model.Email = registerModel.Email;
+                step2Model.Password = registerModel.Password;
+                return RedirectToAction("Register");
+            }
+            else if (Command == "CreateAccount")
+            {
+                if (ModelState.IsValid)
+                {
+                    registerModel.Summary = model.Summary;
+                    if (model.PictureFile != null && model.PictureFile.ContentLength > 0)
+                    {
+                        string directory = @"C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\Content\pictures";
+
+                        if (model.PictureFile.ContentLength > imgSize)
+                        {
+                            ModelState.AddModelError("PictureFile", "The size of the file should not exceed 10 KB");
+                            return View();
+                        }
+
+                        var supportedTypes = new[] { "jpg", "jpeg", "png" };
+
+                        var fileExt = System.IO.Path.GetExtension(model.PictureFile.FileName).Substring(1);
+
+                        if (!supportedTypes.Contains(fileExt))
+                        {
+                            ModelState.AddModelError("PictureFile", "Invalid type. Only the following types (jpg, jpeg, png) are supported.");
+                            return View();
+                        }
+
+                        var fileName = Path.GetFileName(model.PictureFile.FileName);
+                        imagePath = Path.Combine(directory, fileName);
+                        model.PictureFile.SaveAs(imagePath);
+                        registerModel.ImageLink = imagePath;
+                    }
+
+                    var user = new ApplicationUser()
+                    {
+                        UserName = registerModel.UserName,
+                        Email = registerModel.Email,
+                        Country = registerModel.Country,
+                        ZipCode = registerModel.ZipCode,
+                        Gender = registerModel.Gender,
+                        MatchGender = registerModel.MatchGender,
+                        Age = registerModel.Age,
+                        ImageLink = registerModel.ImageLink,
+                        Summary = registerModel.Summary
+                    };
+                    var result = await UserManager.CreateAsync(user, registerModel.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                }
+            }
+            
+            return View();
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
 
         //
         // GET: /Account/Login
@@ -63,37 +226,38 @@ namespace Pairme.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser() { UserName = model.UserName };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    AddErrors(result);
-                }
-            }
+        ////
+        //// POST: /Account/Register
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email,
+        //            Country = model.Country, ZipCode = model.ZipCode };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await SignInAsync(user, isPersistent: false);
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else
+        //        {
+        //            AddErrors(result);
+        //        }
+        //    }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         //
         // POST: /Account/Disassociate
@@ -290,7 +454,7 @@ namespace Pairme.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Account");
         }
 
         //

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Pairme.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -13,17 +14,18 @@ namespace Pairme.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Search()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Messages()
         {
-            ViewBag.Message = "Your contact page.";
+            return View();
+        }
 
+        public ActionResult Meet()
+        {
             return View();
         }
     }

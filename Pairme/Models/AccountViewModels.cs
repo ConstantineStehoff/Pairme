@@ -1,4 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+using System.Web.ModelBinding;
+
 
 namespace Pairme.Models
 {
@@ -43,21 +49,39 @@ namespace Pairme.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    public class RegisterViewModelStep1
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Age")]
+        public int Age { get; set; }
+
+        [Required]
+        [Display(Name = "Gender")]
+        public string Gender { get; set; }
+
+        [Required]
+        [Display(Name = "Match Gender")]
+        public string MatchGender { get; set; }
+
+        [Required]
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+
+        [Required]
+        [Display(Name = "Zip Code")]
+        public int ZipCode { get; set; }
+    }
+
+    public class RegisterViewModelStep2
+    {
+        [Required]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "Confirm email")]
-        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
-        public string ConfirmPassword { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
@@ -69,5 +93,72 @@ namespace Pairme.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class RegisterViewModelStep3
+    {
+        [Display(Name = "Upload Picture")]
+        public HttpPostedFileBase PictureFile { get; set; }
+
+        [Display(Name = "Summary")]
+        public string Summary { get; set; }
+
+        [Required]
+        [Display(Name = "I accept User Agreement")]
+        public bool TermsOfService { get; set; }
+    }
+
+    public class RegisterViewModel
+    {
+        [Required]
+        [Display(Name = "Age")]
+        public int Age { get; set; }
+
+        [Required]
+        [Display(Name = "Gender")]
+        public string Gender { get; set; }
+
+        [Required]
+        [Display(Name = "Match Gender")]
+        public string MatchGender { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Confirm email")]
+        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
+        public string ConfirmEmail { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Country")]
+        public string Country {get; set;}
+
+        [Required]
+        [Display(Name = "Zip Code")]
+        public int ZipCode { get; set; }
+
+        [Display(Name = "Image Link")]
+        public string ImageLink { get; set; }
+
+        [Display(Name = "Summary")]
+        public string Summary { get; set; }
     }
 }
