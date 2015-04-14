@@ -29,12 +29,6 @@ namespace Pairme.Controllers
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
 
-        [AllowAnonymous]
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         private RegisterViewModel GetRegisterModel()
         {
             if (Session["RegisterModel"] == null)
@@ -47,6 +41,16 @@ namespace Pairme.Controllers
         private void RemoveRegisterModel()
         {
             Session.Remove("RegisterModel");
+        }
+
+        [AllowAnonymous]
+        public ActionResult Index()
+        {
+            if (User.Identity.IsAuthenticated) // if the user is already logged in
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
         }
 
         [HttpPost]
@@ -223,41 +227,6 @@ namespace Pairme.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
-        // GET: /Account/Register
-        //[AllowAnonymous]
-        //public ActionResult Register()
-        //{
-        //    return View();
-        //}
-
-        ////
-        //// POST: /Account/Register
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Register(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email,
-        //            Country = model.Country, ZipCode = model.ZipCode };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInAsync(user, isPersistent: false);
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        else
-        //        {
-        //            AddErrors(result);
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
 
         //
         // POST: /Account/Disassociate
