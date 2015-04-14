@@ -11,6 +11,8 @@ namespace Pairme.Models
         public string Email { get; set; }
         public string Country { get; set; }
         public int ZipCode { get; set; }
+        public string ImageLink { get; set; }
+        public string Summary { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

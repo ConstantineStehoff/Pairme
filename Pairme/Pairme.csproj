@@ -191,6 +191,14 @@
     <Compile Include="Migrations\201504120327432_Age.Designer.cs">
       <DependentUpon>201504120327432_Age.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504140124426_ImageLink.cs" />
+    <Compile Include="Migrations\201504140124426_ImageLink.Designer.cs">
+      <DependentUpon>201504140124426_ImageLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504140149105_Summary.cs" />
+    <Compile Include="Migrations\201504140149105_Summary.Designer.cs">
+      <DependentUpon>201504140149105_Summary.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -229,8 +237,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
@@ -241,15 +247,16 @@
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Browse\Index.cshtml" />
-    <Content Include="Views\Account\RegisterStep2.cshtml" />
-    <Content Include="Views\Account\RegisterStep3.cshtml" />
+    <Content Include="Views\Account\Register2.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\pictures\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -267,6 +274,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504120327432_Age.resx">
       <DependentUpon>201504120327432_Age.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504140124426_ImageLink.resx">
+      <DependentUpon>201504140124426_ImageLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504140149105_Summary.resx">
+      <DependentUpon>201504140149105_Summary.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Pairme.Models;
 using MvcContrib.Attributes;
+using System.IO;
 
 namespace Pairme.Controllers
 {
@@ -65,21 +66,21 @@ namespace Pairme.Controllers
                     registerModel.Country = model.Country;
                     registerModel.Age = model.Age;
                     registerModel.ZipCode = model.ZipCode;
-                    return RedirectToAction("RegisterStep2");
+                    return RedirectToAction("Register");
                 }
             }
             return View();
         }
         
         [AllowAnonymous]
-        public ActionResult RegisterStep2()
+        public ActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> RegisterStep2(RegisterViewModelStep2 model, string Command)
+        public ActionResult Register(RegisterViewModelStep2 model, string Command)
         {
             RegisterViewModel registerModel = GetRegisterModel();
             if (Command == "Back")
@@ -100,7 +101,65 @@ namespace Pairme.Controllers
                     registerModel.UserName = model.UserName;
                     registerModel.Email = model.Email;
                     registerModel.Password = model.Password;
-                    
+                    return RedirectToAction("Register2");
+                }
+            }
+            
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Register2()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> Register2(RegisterViewModelStep3 model, string Command)
+        {
+            int imgSize = 30720;
+            string imagePath = "";
+            RegisterViewModel registerModel = GetRegisterModel();
+            if (Command == "Back")
+            {
+                RegisterViewModelStep2 step2Model = new RegisterViewModelStep2();
+                step2Model.UserName = registerModel.UserName;
+                step2Model.Email = registerModel.Email;
+                step2Model.Password = registerModel.Password;
+                return RedirectToAction("Register");
+            }
+            else if (Command == "CreateAccount")
+            {
+                if (ModelState.IsValid)
+                {
+                    registerModel.Summary = model.Summary;
+                    if (model.PictureFile != null && model.PictureFile.ContentLength > 0)
+                    {
+                        string directory = @"C:\Users\Konstantin\Documents\Visual Studio 2013\Projects\Pairme\Pairme\Content\pictures";
+
+                        if (model.PictureFile.ContentLength > imgSize)
+                        {
+                            ModelState.AddModelError("PictureFile", "The size of the file should not exceed 10 KB");
+                            return View();
+                        }
+
+                        var supportedTypes = new[] { "jpg", "jpeg", "png" };
+
+                        var fileExt = System.IO.Path.GetExtension(model.PictureFile.FileName).Substring(1);
+
+                        if (!supportedTypes.Contains(fileExt))
+                        {
+                            ModelState.AddModelError("PictureFile", "Invalid type. Only the following types (jpg, jpeg, png) are supported.");
+                            return View();
+                        }
+
+                        var fileName = Path.GetFileName(model.PictureFile.FileName);
+                        imagePath = Path.Combine(directory, fileName);
+                        model.PictureFile.SaveAs(imagePath);
+                        registerModel.ImageLink = imagePath;
+                    }
+
                     var user = new ApplicationUser()
                     {
                         UserName = registerModel.UserName,
@@ -109,27 +168,24 @@ namespace Pairme.Controllers
                         ZipCode = registerModel.ZipCode,
                         Gender = registerModel.Gender,
                         MatchGender = registerModel.MatchGender,
-                        Age = registerModel.Age
+                        Age = registerModel.Age,
+                        ImageLink = registerModel.ImageLink,
+                        Summary = registerModel.Summary
                     };
                     var result = await UserManager.CreateAsync(user, registerModel.Password);
                     if (result.Succeeded)
                     {
                         await SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("RegisterStep3");
+                        return RedirectToAction("Index", "Home");
                     }
-                    else
-                    {
-                        AddErrors(result);
-                    }
-                    
+
                 }
             }
             
             return View();
         }
 
-        [AllowAnonymous]
-        public ActionResult RegisterStep3()
+        public ActionResult Edit()
         {
             return View();
         }
@@ -170,38 +226,38 @@ namespace Pairme.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email,
-                    Country = model.Country, ZipCode = model.ZipCode };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    AddErrors(result);
-                }
-            }
+        ////
+        //// POST: /Account/Register
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email,
+        //            Country = model.Country, ZipCode = model.ZipCode };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await SignInAsync(user, isPersistent: false);
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else
+        //        {
+        //            AddErrors(result);
+        //        }
+        //    }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         //
         // POST: /Account/Disassociate
@@ -398,7 +454,7 @@ namespace Pairme.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Account");
         }
 
         //

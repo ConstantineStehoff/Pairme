@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Web;
 using System.Web.ModelBinding;
 
 
@@ -97,12 +98,13 @@ namespace Pairme.Models
     public class RegisterViewModelStep3
     {
         [Display(Name = "Upload Picture")]
-        public string PictureFile { get; set; }
+        public HttpPostedFileBase PictureFile { get; set; }
 
         [Display(Name = "Summary")]
         public string Summary { get; set; }
 
-        [Display(Name = "I agree with Terms of Service")]
+        [Required]
+        [Display(Name = "I accept User Agreement")]
         public bool TermsOfService { get; set; }
     }
 
@@ -152,5 +154,11 @@ namespace Pairme.Models
         [Required]
         [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
+
+        [Display(Name = "Image Link")]
+        public string ImageLink { get; set; }
+
+        [Display(Name = "Summary")]
+        public string Summary { get; set; }
     }
 }

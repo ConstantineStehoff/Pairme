@@ -1,0 +1,43 @@
+﻿@model Pairme.Models.RegisterViewModelStep3
+@{
+    ViewBag.Title = "Register Step 2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Step 2</h2>
+
+<div class="container">
+    @using (Html.BeginForm("Register2", "Account", FormMethod.Post, new
+    {
+        @class = "form-horizontal ds-initForm",
+        role = "form",
+        enctype = "multipart/form-data"
+    }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            @Html.LabelFor(m => m.PictureFile)
+            @Html.TextBoxFor(m => m.PictureFile, new { type = "file" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Summary, "Summary")
+            @Html.TextAreaFor(model => model.Summary, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Summary)
+        </div>
+
+        <div class="form-group">
+            @Html.CheckBoxFor(model => model.TermsOfService)
+            @Html.LabelFor(model => model.TermsOfService, "I accept User Agreement")
+        </div>
+
+        <button type="submit" name="Command" value="Back" class="btn btn-primary">Back</button>
+        <button type="submit" name="Command" value="CreateAccount" class="btn btn-primary">Create Account</button>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
