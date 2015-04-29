@@ -12,39 +12,41 @@
         @Html.AntiForgeryToken()
         
         <div class="form-group">
-            @Html.LabelFor(model => model.Gender, "I am a")
-            @Html.DropDownListFor(model => model.Gender, new SelectList(
+            @Html.LabelFor(model => model.GenderID, "I am a")
+            @Html.DropDownListFor(model => model.GenderID, new SelectList(
                       new List<Object>{
-                           new { value = 0 , text = "Woman"  },
-                           new { value = 1 , text = "Man" }
+                           new { value = 0 , text = "Man" },
+                           new { value = 1 , text = "Woman"  },
+                           new { value = 2 , text = "Other" }
                         },
                       "value",
                       "text",
-                       2))
+                       1))
         </div>
         
         <div class="form-group">
-            @Html.LabelFor(model => model.MatchGender, "Looking for a")
-            @Html.DropDownListFor(model => model.MatchGender, new SelectList(
+            @Html.LabelFor(model => model.MatchGenderID, "Looking for a")
+            @Html.DropDownListFor(model => model.MatchGenderID, new SelectList(
                       new List<Object>{
                            new { value = 0 , text = "Man"  },
-                           new { value = 1 , text = "Woman" }
+                           new { value = 1 , text = "Woman" },
+                           new { value = 2 , text = "Other" }
                         },
                       "value",
                       "text",
-                       2))
+                       0))
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Country, "Country")
-            @Html.DropDownListFor(model => model.Country, new SelectList(
+            @Html.LabelFor(model => model.CountryID, "Country")
+            @Html.DropDownListFor(model => model.CountryID, new SelectList(
                       new List<Object>{
                            new { value = 0 , text = "United States"  },
                            new { value = 1 , text = "Canada" }
                         },
                       "value",
                       "text",
-                       2))
+                       0))
         </div>
 
         <div class="form-group">

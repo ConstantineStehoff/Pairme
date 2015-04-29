@@ -64,10 +64,10 @@ namespace Pairme.Controllers
                 }
                 else if (Command == "Register")
                 {
-                    RegisterViewModel registerModel = GetRegisterModel();
-                    registerModel.Gender = model.Gender;
-                    registerModel.MatchGender = model.MatchGender;
-                    registerModel.Country = model.Country;
+                    RegisterViewModel registerModel = GetRegisterModel();                   
+                    registerModel.GenderID = model.GenderID;
+                    registerModel.MatchGenderID = model.MatchGenderID;
+                    registerModel.CountryID = model.CountryID;
                     registerModel.Age = model.Age;
                     registerModel.ZipCode = model.ZipCode;
                     return RedirectToAction("Register");
@@ -90,9 +90,9 @@ namespace Pairme.Controllers
             if (Command == "Back")
             {
                 RegisterViewModelStep1 step1Model = new RegisterViewModelStep1();
-                step1Model.Gender = registerModel.Gender;
-                step1Model.MatchGender = registerModel.MatchGender;
-                step1Model.Country = registerModel.Country;
+                step1Model.GenderID = registerModel.GenderID;
+                step1Model.MatchGenderID = registerModel.MatchGenderID;
+                step1Model.CountryID = registerModel.CountryID;
                 step1Model.Age = registerModel.Age;
                 step1Model.ZipCode = registerModel.ZipCode;
                 return RedirectToAction("Index");
@@ -168,10 +168,10 @@ namespace Pairme.Controllers
                     {
                         UserName = registerModel.UserName,
                         Email = registerModel.Email,
-                        Country = registerModel.Country,
+                        CountryID = registerModel.CountryID,
                         ZipCode = registerModel.ZipCode,
-                        Gender = registerModel.Gender,
-                        MatchGender = registerModel.MatchGender,
+                        GenderID = registerModel.GenderID,
+                        MatchGenderID = registerModel.MatchGenderID,
                         Age = registerModel.Age,
                         ImageLink = registerModel.ImageLink,
                         Summary = registerModel.Summary
@@ -189,8 +189,14 @@ namespace Pairme.Controllers
             return View();
         }
 
+        // display profile
         public ActionResult Edit()
         {
+            //ApplicationUser user = UserManager.FindById(id.ToString());
+            //if (user != null)
+            //{
+            //    return View(user);
+            //}
             return View();
         }
 

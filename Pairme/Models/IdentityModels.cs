@@ -6,10 +6,10 @@ namespace Pairme.Models
     public class ApplicationUser : IdentityUser
     {
         public int Age { get; set; }
-        public string Gender { get; set; }
-        public string MatchGender { get; set; }
+        public int GenderID { get; set; }
+        public int MatchGenderID { get; set; }
         public string Email { get; set; }
-        public string Country { get; set; }
+        public int CountryID { get; set; }
         public int ZipCode { get; set; }
         public string ImageLink { get; set; }
         public string Summary { get; set; }

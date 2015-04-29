@@ -54,18 +54,18 @@ namespace Pairme.Models
         [Required]
         [Display(Name = "Age")]
         public int Age { get; set; }
-
+        
         [Required]
         [Display(Name = "Gender")]
-        public string Gender { get; set; }
+        public int GenderID { get; set; }
 
         [Required]
         [Display(Name = "Match Gender")]
-        public string MatchGender { get; set; }
+        public int MatchGenderID { get; set; }
 
         [Required]
         [Display(Name = "Country")]
-        public string Country { get; set; }
+        public int CountryID { get; set; }
 
         [Required]
         [Display(Name = "Zip Code")]
@@ -116,11 +116,11 @@ namespace Pairme.Models
 
         [Required]
         [Display(Name = "Gender")]
-        public string Gender { get; set; }
+        public int GenderID { get; set; }
 
         [Required]
         [Display(Name = "Match Gender")]
-        public string MatchGender { get; set; }
+        public int MatchGenderID { get; set; }
 
         [Required]
         [Display(Name = "Username")]
@@ -149,7 +149,7 @@ namespace Pairme.Models
 
         [Required]
         [Display(Name = "Country")]
-        public string Country {get; set;}
+        public int CountryID {get; set;}
 
         [Required]
         [Display(Name = "Zip Code")]
@@ -160,5 +160,17 @@ namespace Pairme.Models
 
         [Display(Name = "Summary")]
         public string Summary { get; set; }
+    }
+
+    public class PairmeGender
+    {
+        public int ID { get; set; }
+        public string Gender { get; set; }
+    }
+
+    public class PairmeCountry
+    {
+        public int ID { get; set; }
+        public string Country { get; set; }
     }
 }
