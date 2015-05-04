@@ -155,22 +155,196 @@ namespace Pairme.Models
         [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
 
+        public string State { get; set; }
+
+        public string City { get; set; }
+
+        [Display(Name = "Height")]
+        public int Height { get; set; }
+
         [Display(Name = "Image Link")]
         public string ImageLink { get; set; }
 
         [Display(Name = "Summary")]
         public string Summary { get; set; }
+
+        [Display(Name = "Looking For")]
+        public int LookingForID { get; set; }
+
+        [Display(Name = "Relationship Status")]
+        public int RelationshipStatusID { get; set; }
+
+        [Display(Name = "Ethnicity")]
+        public int EthnicityID { get; set; }
+
+        [Display(Name = "Body Type")]
+        public int BodyTypeID { get; set; }
+
+        [Display(Name = "Profession")]
+        public int ProfessionID { get; set; }
+
+        [Display(Name = "Education")]
+        public int EducationID { get; set; }
+
+        [Display(Name = "Religion")]
+        public int ReligionID { get; set; }
+
+        [Display(Name = "Children")]
+        public int ChildrenID { get; set; }
+
+        [Display(Name = "Smokes")]
+        public int SmokesID { get; set; }
+
+        [Display(Name = "Drinks")]
+        public int DrinksID { get; set; }
+
+        [Display(Name = "Drugs")]
+        public int DrugsID { get; set; }
+
+        [Display(Name = "What I am Looking For")]
+        public string LookingForSummary { get; set; }
     }
 
-    public class PairmeGender
+    // Model for displaying data in the profile page 
+    // (Maybe totatlly wrong approach)
+    public class DisplayProfileModel
     {
-        public int ID { get; set; }
+        [Display(Name = "Age")]
+        public int Age { get; set; }
+
+        [Display(Name = "Gender")]
         public string Gender { get; set; }
+
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+
+        [Display(Name = "Zip Code")]
+        public int ZipCode { get; set; }
+
+        [Display(Name = "Height")]
+        public int Height { get; set; }
+
+        [Display(Name = "Image Link")]
+        public string ImageLink { get; set; }
+
+        [Display(Name = "Summary")]
+        public string Summary { get; set; }
+
+        [Display(Name = "Looking For")]
+        public string LookingFor { get; set; }
+
+        [Display(Name = "Relationship Status")]
+        public string RelationshipStatus { get; set; }
+
+        [Display(Name = "Ethnicity")]
+        public string Ethnicity { get; set; }
+
+        [Display(Name = "Body Type")]
+        public string BodyType { get; set; }
+
+        [Display(Name = "Profession")]
+        public string Profession { get; set; }
+
+        [Display(Name = "Education")]
+        public string Education { get; set; }
+
+        [Display(Name = "Religion")]
+        public string Religion { get; set; }
+
+        [Display(Name = "Children")]
+        public string Children { get; set; }
+
+        [Display(Name = "Smokes")]
+        public string Smokes { get; set; }
+
+        [Display(Name = "Drinks")]
+        public string Drinks { get; set; }
+
+        [Display(Name = "Drugs")]
+        public string Drugs { get; set; }
+
+        [Display(Name = "What I am Looking For")]
+        public string LookingForSummary { get; set; } 
     }
 
-    public class PairmeCountry
+    public class Gender
     {
         public int ID { get; set; }
-        public string Country { get; set; }
+        public string GenderName { get; set; }
+    }
+
+    public class Country
+    {
+        public int ID { get; set; }
+        public string CountryName { get; set; }
+    }
+
+    public class LookingFor
+    {
+        public int ID { get; set; }
+        public string LookingForName { get; set; }
+    }
+
+    public class RelationshipStatus
+    {
+        public int ID { get; set; }
+        public string RelationshipStatusName { get; set; }
+    }
+
+    public class Ethnicity
+    {
+        public int ID { get; set; }
+        public string EthnicityName { get; set; }
+    }
+
+    public class BodyType
+    {
+        public int ID { get; set; }
+        public string BodyTypeName { get; set; }
+    }
+
+    public class Profession
+    {
+        public int ID { get; set; }
+        public string ProfessionName { get; set; }
+    }
+
+    public class Education
+    {
+        public int ID { get; set; }
+        public string EducationLevel { get; set; }
+    }
+
+    public class Religion
+    {
+        public int ID { get; set; }
+        public string ReligionName { get; set; }
+    }
+
+    public class Children
+    {
+        public int ID { get; set; }
+        public string ChildrenName { get; set; }
+    }
+
+    public class Smokes
+    {
+        public int ID { get; set; }
+        public string SmokesName { get; set; }
+    }
+
+    public class Drinks
+    {
+        public int ID { get; set; }
+        public string DrinksName { get; set; }
+    }
+
+    public class Drugs
+    {
+        public int ID { get; set; }
+        public string DrugsName { get; set; }
     }
 }

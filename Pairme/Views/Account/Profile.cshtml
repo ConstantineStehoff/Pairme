@@ -1,0 +1,17 @@
+﻿@model Pairme.Models.DisplayProfileModel
+
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_LoggedLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4"><img src="http://placehold.it/350x150"></div>
+    <div class="col-md-8">
+        <h3>@Model.UserName</h3>
+        <div>
+            <span>@Model.Age year old, @Model.Gender</span>
+        </div>
+    </div>
+</div>
+

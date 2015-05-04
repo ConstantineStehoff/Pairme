@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,15 +12,21 @@ using Microsoft.Owin.Security;
 using Pairme.Models;
 using MvcContrib.Attributes;
 using System.IO;
+using System.Net;
+using System.Xml.Linq;
+using Pairme.Services;
 
 namespace Pairme.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        public AccountController()
+        private IAccountService accountService;
+
+        public AccountController(IAccountService accountService)
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
+            this.accountService = accountService;
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
@@ -164,6 +171,44 @@ namespace Pairme.Controllers
                         registerModel.ImageLink = imagePath;
                     }
 
+                    string country = this.accountService.GetCountryByID(registerModel.CountryID);
+                    string baseUri = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
+                    string state = "";
+                    string city = "";
+                    var address = registerModel.ZipCode.ToString() + ", " + country;
+                    string requestUri = string.Format(baseUri, address);
+
+                    using (WebClient wc = new WebClient())
+                    {
+                        string resultStr = wc.DownloadString(requestUri);
+                        var xmlElm = XElement.Parse(resultStr);
+                        var status = (from elm in xmlElm.Descendants()
+                                      where
+                                          elm.Name == "status"
+                                      select elm).FirstOrDefault();
+                        if (status.Value.ToLower() == "ok")
+                        {
+                            var res = (from elm in xmlElm.Descendants()
+                                       where
+                                           elm.Name == "formatted_address"
+                                       select elm).FirstOrDefault();
+                            requestUri = res.Value;
+                        }
+                        IEnumerable<XElement> r = xmlElm.Element("result").Elements("address_component");
+                        foreach (XElement el in r)
+                        {
+                            var foundEl = el.Element("type").Value;
+                            if (foundEl == "locality")
+                            {
+                                city = el.Element("long_name").Value;
+                            }
+                            else if (foundEl == "administrative_area_level_1")
+                            {
+                                state = el.Element("short_name").Value;
+                            }
+                        }
+                    }
+
                     var user = new ApplicationUser()
                     {
                         UserName = registerModel.UserName,
@@ -174,7 +219,9 @@ namespace Pairme.Controllers
                         MatchGenderID = registerModel.MatchGenderID,
                         Age = registerModel.Age,
                         ImageLink = registerModel.ImageLink,
-                        Summary = registerModel.Summary
+                        Summary = registerModel.Summary,
+                        City = city,
+                        State = state 
                     };
                     var result = await UserManager.CreateAsync(user, registerModel.Password);
                     if (result.Succeeded)
@@ -189,14 +236,33 @@ namespace Pairme.Controllers
             return View();
         }
 
-        // display profile
+        // view profile
+        public ActionResult Profile()
+        {
+            ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                DisplayProfileModel model = new DisplayProfileModel();
+                PairmeEntities db = new PairmeEntities();
+                model.UserName = User.Identity.GetUserName();
+                model.Age = user.Age;
+                model.Gender = (from gd in db.Genders
+                                where gd.ID == user.GenderID
+                                select gd.GenderName).Single();
+
+                return View(model);
+            }
+            return View();
+        }
+
+        // edit profile
         public ActionResult Edit()
         {
-            //ApplicationUser user = UserManager.FindById(id.ToString());
-            //if (user != null)
-            //{
-            //    return View(user);
-            //}
+            ApplicationUser user = UserManager.FindById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                return View(user);
+            }
             return View();
         }
 
