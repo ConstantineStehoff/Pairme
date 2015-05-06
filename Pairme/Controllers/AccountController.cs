@@ -15,18 +15,19 @@ using System.IO;
 using System.Net;
 using System.Xml.Linq;
 using Pairme.Services;
+using Microsoft.Practices.Unity;
 
 namespace Pairme.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private IAccountService accountService;
+        //private IAccountService _accountService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(/*IAccountService accountService*/)
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
-            this.accountService = accountService;
+            //_accountService = accountService;
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
@@ -171,7 +172,9 @@ namespace Pairme.Controllers
                         registerModel.ImageLink = imagePath;
                     }
 
-                    string country = this.accountService.GetCountryByID(registerModel.CountryID);
+                    PairmeEntities db = new PairmeEntities();
+                    //string country = _accountService.GetCountryByID(registerModel.CountryID);
+                    var country = (from gd in db.Countries where gd.ID == registerModel.CountryID select gd.CountryName).Single();
                     string baseUri = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false";
                     string state = "";
                     string city = "";

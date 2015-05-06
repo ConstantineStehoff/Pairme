@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Pairme.Models;
+using Microsoft.Practices.Unity;
+using Pairme.Services;
+using Pairme.Controllers;
 
 namespace Pairme
 {
